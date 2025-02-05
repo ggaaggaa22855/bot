@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Простой чат-бот</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .chat-window {
+            width: 400px;
+            max-height: 500px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-y: auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+        .message {
+            margin-bottom: 10px;
+        }
+        .user-message {
+            text-align: right;
+        }
+        .bot-message {
+            text-align: left;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+<div class="chat-window">
+    <!-- Здесь будут отображаться сообщения -->
+</div>
+<input type="text" id="input-field" placeholder="Напишите сообщение..." />
+<script>
+    const chatWindow = document.querySelector('.chat-window');
+    const inputField = document.getElementById('input-field');
+
+    // Ответы ботa
+    const responses = {
+        'Привет': 'Здравствуйте!',
+        'Как дела?': 'Всё отлично, спасибо! Чем могу помочь?',
+        'Спасибо': 'Пожалуйста! Всегда рад помочь.',
+        'Пока': 'До свидания! Будем рады видеть вас снова.'
+    };
+
+    function addMessage(message, isUser) {
+        const div = document.createElement('div');
+        div.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+        div.textContent = message;
+        chatWindow.appendChild(div);
+        chatWindow.scrollTop = chatWindow.scrollHeight; // Прокрутка вниз
+    }
+
+    inputField.addEventListener('keydown', event => {
+        if (event.key === 'Enter') {
+            const userInput = inputField.value.trim();
+            if (userInput !== '') {
+                addMessage(userInput, true); // Сообщение пользователя
+                let botResponse = '';
+                if (responses[userInput]) {
+                    botResponse = responses[userInput];
+                } else {
+                    botResponse = 'Извините, я не совсем понял ваш запрос.';
+                }
+                setTimeout(() => { // Имитация задержки ответа
+                    addMessage(botResponse, false); // Ответ бота
+                }, 1000);
+                inputField.value = ''; // Очистить поле ввода
+            }
+        }
+    });
+</script>
+</body>
+</html>
